@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, splitVendorChunkPlugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from "path";
 
@@ -12,6 +12,17 @@ export default defineConfig({
   },
   build: {
     // phaser doesn't accept inlined assets
-    assetsInlineLimit: 0
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      plugins: [splitVendorChunkPlugin()],
+      output: {
+        manualChunks: {
+          phaser: ['phaser'],
+        },
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
+        assetFileNames: '[name][extname]'
+      },
+    },
   }
 })
